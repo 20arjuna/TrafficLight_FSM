@@ -1,5 +1,8 @@
 # INSTRUCTIONS FOR USE
 This is the control panel for the Traffic Light Simulation.
+
+
+
 <img width="306" alt="screen shot 2018-09-07 at 8 12 14 am" src="https://user-images.githubusercontent.com/13387177/45227627-c755b200-b275-11e8-9070-a8ab3bfc7f42.png">
 By hitting the <img width="100" alt="screen shot 2018-09-07 at 8 13 42 am" src="https://user-images.githubusercontent.com/13387177/45227701-f2d89c80-b275-11e8-9ad7-824fde0e985a.png"> button, you can observe the animation of a normal stop light
 
