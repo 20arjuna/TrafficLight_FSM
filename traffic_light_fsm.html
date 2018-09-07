@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<title>Two way Stop Light as Finite State machine: traffic_light_fsm</title>
+<style>
+
+#containerLight1 {
+  width: 50px;
+  height: 150px;
+  position: relative;
+  background: black;
+}
+#containerLight2 {
+  width: 50px;
+  height: 150px;
+  position: relative;
+  background: black;
+}
+
+#stopLightRed1{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: black;
+}
+#stopLightRed2{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: red;
+}
+
+#stopLightOrange1{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: black;
+}
+#stopLightOrange2{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: black;
+}
+
+#stopLightGreen1{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: green;
+}
+#stopLightGreen2{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: black;
+}
+#containerLeftLight1{
+
+  width: 50px;
+  height: 150px;
+  position: relative;
+  background-color: grey;
+}
+#containerLeftLight2{
+
+  width: 50px;
+  height: 150px;
+  position: relative;
+  background-color: grey;
+}
+#LeftGreen1{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: black;
+}
+#LeftOrange1{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: black;
+}
+#LeftRed1{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: red;
+}
+#LeftGreen2{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: black;
+}
+#LeftOrange2{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: black;
+}
+#LeftRed2{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: red;
+}
+#containerPedLight1{
+
+  width: 50px;
+  height: 150px;
+  position: relative;
+  background-color: blue;
+}
+#containerPedLight2{
+
+  width: 50px;
+  height: 150px;
+  position: relative;
+  background-color: blue;
+}
+
+/* Blue Light means cross */
+#pedCrossRed1{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: black;
+}
+#pedCrossRed2{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: red;
+}
+#pedCrossYellow1{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: black;
+}
+/* Brown Light means don't cross*/
+#pedCrossYellow2{
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: black;
+}
+#pedCrossWhite1{
+  border-radius:  25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: white;
+}
+#pedCrossWhite2{
+  border-radius:  25px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background-color: black;
+}
+</style>
+<body>
+
+<p>
+<button onclick="myStep()">Step animation</button>
+<button title ="Toggles" onclick="crossNow()">Cross Please</button>
+<br>
+<b>North-South Traffic ----- East-West Traffic</b>
+<br>
+<button onclick="leftNS()">Left Please</button>
+<b>-----------------</b>
+<button onclick="leftEW()">Left Please</button>
+</p>
+
+<p>
+</p>
+
+<h1>North-South traffic</h1>
+<div id ="containerLight1">
+<div id ="stopLightRed1"></div>
+<div id ="stopLightOrange1"></div>
+<div id ="stopLightGreen1"></div>
+
+
+</div>
+<br>
+<h1>East-West traffic</h1>
+<div id ="containerLight2">
+<div id ="stopLightRed2"></div>
+<div id ="stopLightOrange2"></div>
+<div id ="stopLightGreen2"></div>
+
+</div>
+<br>
+
+<h1>North-South Left</h1>
+<div id="containerLeftLight1">
+<div id ="LeftRed1"></div>
+<div id ="LeftOrange1"></div>
+<div id ="LeftGreen1"></div>
+</div>
+<br>
+
+<h1>East-West Left</h1>
+<div id="containerLeftLight2">
+<div id ="LeftRed2"></div>
+<div id ="LeftOrange2"></div>
+<div id ="LeftGreen2"></div>
+</div>
+<br>
+
+<h1>North-South cross</h1>
+<div id="containerPedLight1">
+<div id ="pedCrossRed1"></div>
+<div id ="pedCrossYellow1"></div>
+<div id="pedCrossWhite1"></div>
+</div>
+<br>
+
+<h1>East-West cross</h1>
+<div id="containerPedLight2">
+<div id ="pedCrossRed2"></div>
+<div id="pedCrossYellow2"></div>
+<div id ="pedCrossWhite2"></div>
+</div>
+
+<script>
+  var intr = 0;
+  var leftIntr =0;
+  var crossIntr =0;
+
+  var NS_Left = new Boolean(false);
+  var EW_Left = new Boolean(false);
+  var NS_Cross = new Boolean(false);
+  var EW_Cross = new Boolean(false);
+  var cross = new Boolean(false);
+
+
+
+
+  var Redlight1 = document.getElementById("stopLightRed1");
+  var Orangelight1 = document.getElementById("stopLightOrange1");
+  var Greenlight1 = document.getElementById("stopLightGreen1");
+
+  var Redlight2 = document.getElementById("stopLightRed2");
+  var Orangelight2 = document.getElementById("stopLightOrange2");
+  var Greenlight2 = document.getElementById("stopLightGreen2");
+
+  var RedLeft1 = document.getElementById("LeftRed1");
+  var OrangeLeft1 = document.getElementById("LeftOrange1");
+  var GreenLeft1 = document.getElementById("LeftGreen1");
+
+  var RedLeft2 = document.getElementById("LeftRed2");
+  var OrangeLeft2 = document.getElementById("LeftOrange2");
+  var GreenLeft2 = document.getElementById("LeftGreen2");
+
+  var RedCross1 = document.getElementById("pedCrossRed1");
+  var OrangeCross1 = document.getElementById("pedCrossYellow1");
+  var WhiteCross1 = document.getElementById("pedCrossWhite1");
+
+  var RedCross2 = document.getElementById("pedCrossRed2");
+  var OrangeCross2 = document.getElementById("pedCrossYellow2");
+  var WhiteCross2 = document.getElementById("pedCrossWhite2");
+
+ function changeLight(elementB, elementN, colorN) {
+    elementN.style.backgroundColor = colorN;
+    elementB.style.backgroundColor="black";
+ }
+
+
+
+function myStep()
+{
+
+
+  switch(intr)
+  {
+
+    case 0:
+      changeLight(Greenlight1,Orangelight1, "orange");
+      if(cross==true){
+        changeLight(WhiteCross1, OrangeCross1, "orange");
+      }
+      else{
+        changeLight(WhiteCross1, RedCross1, "red");
+      }
+
+      break;
+    case 1:
+
+      changeLight(Orangelight1,Redlight1, "red");
+
+        changeLight(OrangeCross1, RedCross1, "red");
+
+
+      if(NS_Left==true){
+        switch(leftIntr){
+          case 0:
+            changeLight(RedLeft1, GreenLeft1, "green");
+            break;
+          case 1:
+            changeLight(GreenLeft1, OrangeLeft1, "orange");
+            break;
+          case 2:
+            changeLight(OrangeLeft1, RedLeft1, "red");
+            changeLight(Redlight2, Greenlight2, "green");
+            NS_Left=false;
+            break;
+        }
+        leftIntr++;
+        leftIntr = leftIntr%3;
+        if (NS_Left == true){return;}
+      }
+      else if(EW_Left==true){
+        switch(leftIntr){
+          case 0:
+            changeLight(RedLeft2, GreenLeft2, "green");
+            break;
+          case 1:
+            changeLight(GreenLeft2, OrangeLeft2, "orange");
+            break;
+          case 2:
+            changeLight(OrangeLeft2, RedLeft2, "red");
+            changeLight(Redlight2, Greenlight2, "green");
+            EW_Left=false;
+            break;
+        }
+        leftIntr++;
+        leftIntr = leftIntr%3;
+        if (EW_Left == true){return;}
+      }
+      else{
+        changeLight(Redlight2, Greenlight2, "green");
+        if(cross == true){
+          changeLight(RedCross2, WhiteCross2, "white");
+
+        }
+
+      }
+      break;
+
+    case 2:
+      changeLight(Greenlight2,Orangelight2, "orange");
+      changeLight(WhiteCross2, OrangeCross2, "orange");
+      break;
+
+    case 3:
+      changeLight(Orangelight2,Redlight2, "red");
+      changeLight(OrangeCross2, RedCross2, "red");
+      if(NS_Left==true){
+        switch(leftIntr){
+          case 0:
+            changeLight(RedLeft1, GreenLeft1, "green");
+            break;
+          case 1:
+            changeLight(GreenLeft1, OrangeLeft1, "orange");
+            break;
+          case 2:
+            changeLight(OrangeLeft1, RedLeft1, "red");
+            changeLight(Redlight1, Greenlight1, "green");
+            NS_Left=false;
+            break;
+        }
+        leftIntr++;
+        leftIntr = leftIntr%3;
+        if (NS_Left == true){return;}
+      }
+      else if(EW_Left==true){
+        switch(leftIntr){
+          case 0:
+            changeLight(RedLeft2, GreenLeft2, "green");
+            break;
+          case 1:
+            changeLight(GreenLeft2, OrangeLeft2, "orange");
+            break;
+          case 2:
+            changeLight(OrangeLeft2, RedLeft2, "red");
+            changeLight(Redlight2, Greenlight2, "green");
+            EW_Left=false;
+            break;
+        }
+        leftIntr++;
+        leftIntr = leftIntr%3;
+        if (EW_Left == true){return;}
+      }
+      else{
+        if(cross == true){
+          changeLight(RedCross1, WhiteCross1, "white");
+        }
+        changeLight(Redlight1, Greenlight1, "green");
+      }
+
+      break;
+
+  }
+
+       intr++;
+       intr = intr % 4;
+}
+
+function leftNS(){
+  NS_Left= true;
+}
+function leftEW(){
+  EW_Left=true;
+}
+
+function crossNow(){
+  switch(crossIntr){
+    case 0:
+      cross = true;
+      break;
+    case 1:
+
+      cross = false;
+      break;
+    }
+    crossIntr++;
+    crossIntr%=2;
+  }
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
